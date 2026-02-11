@@ -52,7 +52,7 @@ export const SCENARIO_RESPONSES: Record<string, string[]> = {
     "제로 회사에서 자면 시간차 안써도 돼요.",
     "일찍 자고 일찍 일어나세요 제로."
   ],
-  "당근이 필요해요": [
+  "네 당근이 필요합니다!": [
     "당근 주면 일찍 올 건가요? 그럼 고려해 볼게요 제로.",
     "당근이요 제로? 당근을 찾을 때가 아닙니다 제로.",
     "당근을 바라다니 괘씸하군요 제로.",
@@ -62,7 +62,7 @@ export const SCENARIO_RESPONSES: Record<string, string[]> = {
     "제로 당근은 채찍 10번 맞아야 1번 줄 수 있어요.",
     "당근의 당도 꺼내지 마세요 제로."
   ],
-  "채찍이 필요해요": [
+  "네 채찍이 필요합니다..": [
     "채찍 필요하다는 말 할 시간에 마우스 한 번 더 움직이세요.",
     "채찍 맞기 전에 알람 소리부터 키우는 건 어때요?",
     "정신 차려요 제로. 우리 월급 받는 사람들이에요.",
@@ -89,8 +89,8 @@ export const INITIAL_STEPS: Record<string, Step> = {
     id: "mental_q1",
     question: "제로\n힘든가요?",
     options: [
-      { label: "당근이 필요해요", isFinal: true },
-      { label: "채찍이 필요해요", isFinal: true },
+      { label: "네 당근이 필요합니다!", isFinal: true },
+      { label: "네 채찍이 필요합니다..", isFinal: true },
     ]
   }
 };
@@ -101,6 +101,6 @@ export const JABDORI_MESSAGES = [
   ...SCENARIO_RESPONSES["10시에 딱 도착했습니다."],
   ...SCENARIO_RESPONSES["10시 아주 조금 넘었습니다.."],
   ...SCENARIO_RESPONSES["시간차를 썼습니다......"],
-  ...SCENARIO_RESPONSES["당근이 필요해요"],
-  ...SCENARIO_RESPONSES["채찍이 필요해요"]
+  ...SCENARIO_RESPONSES["네 당근이 필요합니다!"],
+  ...SCENARIO_RESPONSES["네 채찍이 필요합니다.."]
 ];
