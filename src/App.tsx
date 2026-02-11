@@ -148,7 +148,7 @@ export default function App() {
       {viewMode !== 'INTRO' && (
         <div className="footer-nav">
           <button className="return-pill" onClick={resetToHome}>
-            처음으로
+            일하러 가기
           </button>
         </div>
       )}
