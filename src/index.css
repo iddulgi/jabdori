@@ -73,7 +73,7 @@ h1 {
 h1.shrink {
   font-size: 18px;
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   opacity: 1;
   min-height: auto;
 }
@@ -90,7 +90,7 @@ h1.shrink {
 .chat-window {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
 }
 
 /* 말풍선 공통 스타일 */

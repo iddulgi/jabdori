@@ -77,7 +77,7 @@ export const SCENARIO_RESPONSES: Record<string, string[]> = {
 export const INITIAL_STEPS: Record<string, Step> = {
   "energetic": {
     id: "energetic_q1",
-    question: "제로\n오늘 몇 시에 왔어요?",
+    question: "제로 오늘 몇 시에 왔어요?",
     options: [
       { label: "10시 전에 왔습니다. 뿌듯합니다..!", isFinal: true },
       { label: "10시에 딱 도착했습니다.", isFinal: true },
@@ -87,7 +87,7 @@ export const INITIAL_STEPS: Record<string, Step> = {
   },
   "mental": {
     id: "mental_q1",
-    question: "제로\n힘든가요?",
+    question: "제로 훈련 방법을 선택하세요.",
     options: [
       { label: "네 당근이 필요합니다!", isFinal: true },
       { label: "네 채찍이 필요합니다..", isFinal: true },
