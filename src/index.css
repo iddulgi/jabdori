@@ -67,6 +67,7 @@ h1 {
   margin-top: 100px;
   margin-bottom: 40px;
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 90px;
 }
 
 h1.shrink {
@@ -74,6 +75,7 @@ h1.shrink {
   margin-top: 0;
   margin-bottom: 24px;
   opacity: 1;
+  min-height: auto;
 }
 
 /* 메인 버튼 그룹 */
@@ -82,7 +84,6 @@ h1.shrink {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: fadeIn 0.8s ease-out;
 }
 
 /* 챗봇 윈도우 */
@@ -186,6 +187,7 @@ h1.shrink {
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .return-pill:active {

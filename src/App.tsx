@@ -15,6 +15,7 @@ export default function App() {
   const [history, setHistory] = useState<ChatEntry[]>([]);
   const [currentStep, setCurrentStep] = useState<Step | null>(null);
   const [isTyping, setIsTyping] = useState(false); // 타이핑 상태 추가
+  const [isIntroTyping, setIsIntroTyping] = useState(true); // 인트로 타이핑 상태
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -62,26 +63,51 @@ export default function App() {
     setHistory([]);
     setCurrentStep(null);
     setIsTyping(false);
+    setIsIntroTyping(true);
   };
 
   return (
     <div id="root">
       <div className="app-container" ref={scrollRef}>
         <h1 className={viewMode !== 'INTRO' ? 'shrink' : ''}>
-          안녕하세요, 제로{"\n"}무엇을 도와드릴까요?
+          {viewMode === 'INTRO' ? (
+            <Typewriter
+              text={`안녕하세요, 제로\n무엇을 도와드릴까요?`}
+              speed={30}
+              onComplete={() => setIsIntroTyping(false)}
+            />
+          ) : (
+            `안녕하세요, 제로\n무엇을 도와드릴까요?`
+          )}
         </h1>
 
         {viewMode === 'INTRO' && (
           <div className="intro-buttons">
-            <button className="action-pill" onClick={() => startScenario('energetic', '활기찬 하루 만들기')}>
-              활기찬 하루 만들기
-            </button>
-            <button className="action-pill" onClick={() => startScenario('mental', '멘탈 강화 훈련하기')}>
-              멘탈 강화 훈련하기
-            </button>
-            <button className="action-pill" onClick={() => setViewMode('ALL_MESSAGES')}>
-              전체보기
-            </button>
+            {!isIntroTyping && (
+              <>
+                <button
+                  className="action-pill fade-in-stagger"
+                  style={{ animationDelay: '0s' }}
+                  onClick={() => startScenario('energetic', '활기찬 하루 만들기')}
+                >
+                  활기찬 하루 만들기
+                </button>
+                <button
+                  className="action-pill fade-in-stagger"
+                  style={{ animationDelay: '0.1s' }}
+                  onClick={() => startScenario('mental', '멘탈 강화 훈련하기')}
+                >
+                  멘탈 강화 훈련하기
+                </button>
+                <button
+                  className="action-pill fade-in-stagger"
+                  style={{ animationDelay: '0.2s' }}
+                  onClick={() => setViewMode('ALL_MESSAGES')}
+                >
+                  전체보기
+                </button>
+              </>
+            )}
           </div>
         )}
 
