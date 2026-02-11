@@ -42,7 +42,7 @@ export const SCENARIO_RESPONSES: Record<string, string[]> = {
     "제로 이제 회사에서 자요. 이불 사줄게요.",
     "제로 지각은 안돼요. 정신 차리세요."
   ],
-  "시간차를 썼습니다......": [
+  "시간차를 썼습니다....": [
     "시차 적응하는 중인가요 제로?",
     "시간차 그만 써요 제로.",
     "오늘도 시간차? 앤디쉬 쏠 명분이 쌓여가네요.",
@@ -82,7 +82,7 @@ export const INITIAL_STEPS: Record<string, Step> = {
       { label: "10시 전에 왔습니다. 뿌듯합니다..!", isFinal: true },
       { label: "10시에 딱 도착했습니다.", isFinal: true },
       { label: "10시 아주 조금 넘었습니다..", isFinal: true },
-      { label: "시간차를 썼습니다......", isFinal: true },
+      { label: "시간차를 썼습니다....", isFinal: true },
     ]
   },
   "mental": {
@@ -100,7 +100,7 @@ export const JABDORI_MESSAGES = [
   ...SCENARIO_RESPONSES["10시 전에 왔습니다. 뿌듯합니다..!"],
   ...SCENARIO_RESPONSES["10시에 딱 도착했습니다."],
   ...SCENARIO_RESPONSES["10시 아주 조금 넘었습니다.."],
-  ...SCENARIO_RESPONSES["시간차를 썼습니다......"],
+  ...SCENARIO_RESPONSES["시간차를 썼습니다...."],
   ...SCENARIO_RESPONSES["네 당근이 필요합니다!"],
   ...SCENARIO_RESPONSES["네 채찍이 필요합니다.."]
 ];
