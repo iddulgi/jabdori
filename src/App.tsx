@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { INITIAL_STEPS, JABDORI_MESSAGES, SCENARIO_RESPONSES } from './data/messages';
 import type { Step } from './data/messages';
+import Typewriter from './components/Typewriter';
 
 type ViewMode = 'INTRO' | 'CHAT' | 'ALL_MESSAGES';
 
@@ -13,6 +14,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('INTRO');
   const [history, setHistory] = useState<ChatEntry[]>([]);
   const [currentStep, setCurrentStep] = useState<Step | null>(null);
+  const [isTyping, setIsTyping] = useState(false); // 타이핑 상태 추가
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -21,44 +23,33 @@ export default function App() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [history, currentStep]);
+  }, [history, currentStep, isTyping]); // isTyping 변경 시에도 스크롤 (옵션 등장 등)
 
   // 시나리오 시작 (활기찬 하루 / 멘탈 강화)
   const startScenario = (type: string, label: string) => {
     setViewMode('CHAT');
-    // 사용자가 누른 버튼을 먼저 말풍선으로 추가
     setHistory([{ type: 'USER', text: label }]);
-    // 0.5초 뒤에 봇의 첫 질문이 나타나도록 설정 (선택 사항이나 자연스러움 위해)
     setTimeout(() => {
       setCurrentStep(INITIAL_STEPS[type]);
-    }, 300);
+      setIsTyping(true); // 타이핑 시작
+    }, 800);
   };
 
   // 답변 선택 핸들러
   const handleOptionClick = (label: string, isFinal?: boolean) => {
-    // 1. 현재 질문을 대화 기록(history)에 먼저 추가하여 고정시킵니다.
     if (currentStep) {
       setHistory(prev => [...prev, { type: 'BOT', text: currentStep.question }]);
     }
-
-    // 2. 유저의 답변 말풍선을 추가합니다.
     setHistory(prev => [...prev, { type: 'USER', text: label }]);
-
-    // 3. 현재 단계(버튼들)를 정리합니다.
     setCurrentStep(null);
+    setIsTyping(false); // 리셋
 
     if (isFinal) {
       setTimeout(() => {
         const responses = SCENARIO_RESPONSES[label] || JABDORI_MESSAGES;
-
-        // 로컬 스토리지에서 현재 라벨에 대한 인덱스 가져오기 (없으면 0)
         const storageKey = `jabdori_msg_idx_${label}`;
         const currentIdx = parseInt(localStorage.getItem(storageKey) || '0', 10);
-
-        // 순서대로 메시지 선택
         const selectedMsg = responses[currentIdx % responses.length];
-
-        // 다음 인덱스 저장 (무한 루프)
         localStorage.setItem(storageKey, (currentIdx + 1).toString());
 
         setHistory(prev => [...prev, { type: 'BOT', text: selectedMsg }]);
@@ -70,17 +61,16 @@ export default function App() {
     setViewMode('INTRO');
     setHistory([]);
     setCurrentStep(null);
+    setIsTyping(false);
   };
 
   return (
     <div id="root">
       <div className="app-container" ref={scrollRef}>
-        {/* 공통 타이틀: 인트로일 때 크고 중앙, 대화 중일 때 작고 상단 */}
         <h1 className={viewMode !== 'INTRO' ? 'shrink' : ''}>
           안녕하세요, 제로{"\n"}무엇을 도와드릴까요?
         </h1>
 
-        {/* 인트로 메인 화면 */}
         {viewMode === 'INTRO' && (
           <div className="intro-buttons">
             <button className="action-pill" onClick={() => startScenario('energetic', '활기찬 하루 만들기')}>
@@ -95,41 +85,54 @@ export default function App() {
           </div>
         )}
 
-        {/* 챗봇 대화 영역 */}
         {viewMode === 'CHAT' && (
           <div className="chat-window">
-            {/* 지나간 대화 기록 */}
             {history.map((chat, index) => (
               <div key={index} className={chat.type === 'USER' ? 'bubble user-bubble' : 'bot-message'}>
                 {chat.type === 'USER' ? (
                   chat.text
                 ) : (
-                  <div className="bot-text">{chat.text}</div>
+                  <div className="bot-text">
+                    {/* 마지막 메시지이고 봇이면 타이핑 효과, 아니면 그냥 텍스트 */}
+                    {index === history.length - 1 ? (
+                      <Typewriter text={chat.text} speed={30} />
+                    ) : (
+                      chat.text
+                    )}
+                  </div>
                 )}
               </div>
             ))}
 
-            {/* 현재 대기 중인 봇의 질문과 답변지 */}
             {currentStep && (
               <div className="bot-message">
-                <div className="bot-text">{currentStep.question}</div>
-                <div className="option-group">
-                  {currentStep.options.map((opt, idx) => (
-                    <button
-                      key={idx}
-                      className="action-pill"
-                      onClick={() => handleOptionClick(opt.label, opt.isFinal)}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+                <div className="bot-text">
+                  <Typewriter
+                    text={currentStep.question}
+                    speed={30}
+                    onComplete={() => setIsTyping(false)}
+                  />
                 </div>
+                {/* 타이핑이 끝나야 옵션 노출 (!isTyping) */}
+                {!isTyping && (
+                  <div className="option-group">
+                    {currentStep.options.map((opt, idx) => (
+                      <button
+                        key={idx}
+                        className="action-pill fade-in-stagger"
+                        style={{ animationDelay: `${idx * 0.1}s` }}
+                        onClick={() => handleOptionClick(opt.label, opt.isFinal)}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
         )}
 
-        {/* 전체보기 영역 */}
         {viewMode === 'ALL_MESSAGES' && (
           <div className="chat-window">
             <div className="bubble user-bubble">잡도리 전체 보기</div>
@@ -144,7 +147,6 @@ export default function App() {
         )}
       </div>
 
-      {/* 처음으로 돌아가기 버튼 (하단 고정) */}
       {viewMode !== 'INTRO' && (
         <div className="footer-nav">
           <button className="return-pill" onClick={resetToHome}>
